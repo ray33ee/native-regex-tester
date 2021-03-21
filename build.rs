@@ -13,13 +13,16 @@ fn main() {
     let mut f = File::create(&dest_path).unwrap();
 
     let regexes = [
-        ("([A-Z][a-z]*)([0-9]+)?", "symbol_function"), //Match chemical symbols, capturing the symbol and the quantity
-        ("([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})", "ipv4_function"), //Match IPV4 addresses, capturing the 4 byte values
-        ("\\s+", "whitespace_function"),
-        ("[-+]?[0-9]+(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?", "float_function"),
-        ("[\\W]+", "nonword_function"),
-        ("gr[ea]y", "grey_function"),
-        ("\\b[0-9]+\\b", "wordboundary_function")
+        ("([A-Z][a-z]*)([0-9]+)?", "SymbolRegex"), //Match chemical symbols, capturing the symbol and the quantity
+        ("([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})", "Ipv4Regex"), //Match IPV4 addresses, capturing the 4 byte values
+        ("\\s+", "WhitespaceRegex"),
+        ("[-+]?[0-9]+(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?", "FloatRegex"),
+        ("[\\W]+", "NonwordRegex"),
+        ("gr[ea]y", "GreyRegex"),
+        ("\\b[0-9]+\\b", "WordboundaryRegex"),
+        ("^hello", "StartRegex"),
+        ("hello$", "EndRegex"),
+        ("(?P<symbol>[A-Z][a-z]*)(?P<quantity>[0-9]+)?", "NamesRegex")
     ];
 
     for (regex, function) in regexes.iter() {

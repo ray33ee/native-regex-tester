@@ -17,15 +17,14 @@ checksum = "0ee1c47aaa256ecabcaea351eae4a9b01ef39ed810004e298d2511ed284b1525"
 
 [[package]]
 name = "native-regex-lib"
-version = "0.2.2"
-source = "git+https://github.com/ray33ee/native-regex-lib?branch=main#0e138a146516aae0207ecba5e6d7948f3e3a30fa"
+version = "0.2.4"
 dependencies = [
  "regex",
 ]
 
 [[package]]
 name = "native-regex-tester"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "native-regex-lib",
  "regex",

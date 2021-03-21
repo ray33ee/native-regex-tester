@@ -1,8 +1,10 @@
+
+
 mod tests;
 
 
 fn main() {
-    println!("This package is for testing only. Pleasr run `cargo test`");
+    println!("This package is for testing only. Please run `cargo test`");
 
 
 }

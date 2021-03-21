@@ -3,15 +3,15 @@
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use native_regex_lib::native_regex::NativeRegex;
-    use native_regex_lib::parse::Token::Alternation;
 
     include!(concat!(env!("OUT_DIR"), "/regexes.rs"));
+
 
     #[test]
     fn test_symbol_regex() {
         let haystack = "sdfsdfsd symbols:  Qoij345 and Ndds fgfdg";
 
-        let reg_test = NativeRegex::new(symbol_function);
+        let reg_test = SymbolRegex::new();
 
         //Make sure the regex finds all the matches
         {
@@ -29,12 +29,13 @@ mod tests {
         }
     }
 
+
     #[test]
     fn test_ipv4_regex() {
 
         let ipv4_search = "aoksfdsf 192.168.0.1 [aspspd";
 
-        let reg_test = NativeRegex::new(ipv4_function);
+        let reg_test = Ipv4Regex::new();
 
         let first_match = reg_test.captures(ipv4_search).unwrap();
 
@@ -51,7 +52,7 @@ mod tests {
 
         let ipv4_search = "this will test the \n whitespace     spliiter    function";
 
-        let reg_test = NativeRegex::new(whitespace_function);
+        let reg_test = WhitespaceRegex::new();
 
         assert_eq!(reg_test.split(ipv4_search).collect::<Vec<_>>(), ["this", "will", "test", "the", "whitespace", "spliiter", "function"]);
     }
@@ -61,7 +62,7 @@ mod tests {
 
         let float_search = "dfoisdjf 123.324e44, 123, 123e59, 312.45 aoskp;osdk";
 
-        let reg_test = NativeRegex::new(float_function);
+        let reg_test = FloatRegex::new();
 
 
 
@@ -79,7 +80,7 @@ mod tests {
     fn nonword_regex() {
         let nonword_search = "This ^*&%*&^ sentence also has non-words which will   be identified";
 
-        let reg_test = NativeRegex::new(nonword_function);
+        let reg_test = NonwordRegex::new();
 
         //Make sure the regex finds all the matches
         {
@@ -101,7 +102,7 @@ mod tests {
     fn grey_regex() {
         let grey_search = "Text to show the replacing of grey and gray.";
 
-        let reg_test = NativeRegex::new(grey_function);
+        let reg_test = GreyRegex::new();
 
         assert_eq!(reg_test.replace(grey_search, |_, _| String::from("purple")).as_str(), "Text to show the replacing of purple and purple.");
 
@@ -111,9 +112,9 @@ mod tests {
     fn ip_replace() {
         let ip_search = "Convert valid IP addresses 192.168.0.1 and 234.54.23.5 but not 192. or 300.45.2.4 into 32-bit numbers";
 
-        let reg_test = NativeRegex::new(ipv4_function);
+        let reg_test = Ipv4Regex::new();
 
-        assert_eq!(reg_test.replace(ip_search, |i, cap| {
+        assert_eq!(reg_test.replace(ip_search, |_, cap| {
             let mut num = 0u32;
             let mut scale = 256*256*256u32;
             for index in 1..5 {
@@ -132,7 +133,7 @@ mod tests {
 
         let sample_string = "23 we234s dk2 23423 34 3";
 
-        let reg_test = NativeRegex::new(wordboundary_function);
+        let reg_test = WordboundaryRegex::new();
 
         //Make sure the regex finds all the matches
         {
@@ -142,6 +143,47 @@ mod tests {
             assert_eq!(capture_iter.next().unwrap().get(0).unwrap().as_str(), "34");
             assert_eq!(capture_iter.next().unwrap().get(0).unwrap().as_str(), "3");
         }
+
+    }
+
+    #[test]
+    fn anchor_regex() {
+
+        let sample_string = "hello hellohelloh hello hello";
+
+        let start_test = StartRegex::new();
+        let end_test = EndRegex::new();
+
+        //Make sure the regex finds all the matches
+        {
+            let mut capture_iter = start_test.captures_iter(sample_string);
+            let m = capture_iter.next().unwrap().get(0).unwrap();
+            assert_eq!(m.as_str(), "hello");
+            assert_eq!(m.start(), 0);
+            assert_eq!(capture_iter.next(), None);
+        }
+
+        //Make sure the regex finds all the matches
+        {
+            let mut capture_iter = end_test.captures_iter(sample_string);
+            let m = capture_iter.next().unwrap().get(0).unwrap();
+            assert_eq!(m.as_str(), "hello");
+            assert_eq!(m.start(), 24);
+            assert_eq!(capture_iter.next(), None);
+        }
+
+    }
+
+    #[test]
+    fn name_test() {
+        let sample = "asdos Na33 ps";
+
+        let reg_test = NamesRegex::new();
+
+        let cap = reg_test.captures(sample).unwrap();
+
+        assert_eq!(cap.name("symbol").unwrap().as_str(), "Na");
+        assert_eq!(cap.name("quantity").unwrap().as_str(), "33");
 
     }
 
