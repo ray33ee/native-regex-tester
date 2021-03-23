@@ -2,7 +2,7 @@
 #[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use native_regex_lib::native_regex::NativeRegex;
+    use native_regex_lib::native_regex::{NativeRegex, NativeRegexSet};
 
     include!(concat!(env!("OUT_DIR"), "/regexes.rs"));
 
@@ -34,8 +34,11 @@ mod tests {
     fn test_ipv4_regex() {
 
         let ipv4_search = "aoksfdsf 192.168.0.1 [aspspd";
+        let ipv4_search2 = "168.0.1";
 
         let reg_test = Ipv4Regex::new();
+
+        assert!(!reg_test.is_match(ipv4_search2));
 
         let first_match = reg_test.captures(ipv4_search).unwrap();
 
@@ -184,6 +187,40 @@ mod tests {
 
         assert_eq!(cap.name("symbol").unwrap().as_str(), "Na");
         assert_eq!(cap.name("quantity").unwrap().as_str(), "33");
+
+    }
+
+    #[test]
+    fn is_match_regset_test() {
+        let ipv4 = Ipv4Regex::new();
+        let symbol = SymbolRegex::new();
+        let float = FloatRegex::new();
+
+        let set = NativeRegexSet::new(vec![ipv4.engine(), symbol.engine(), float.engine()]);
+
+        assert!(!set.is_match("this shouldn't match"));
+        assert!(set.is_match("This should though"));
+        assert!(set.is_match("This too 192.123.1.2"));
+        assert!(set.is_match("and this 123.5e4"));
+        assert!(!set.is_match("but this won't"));
+
+
+
+    }
+
+    #[test]
+    fn matches_regset_test() {
+        let ipv4 = Ipv4Regex::new();
+        let symbol = SymbolRegex::new();
+        let float = FloatRegex::new();
+
+        let set = NativeRegexSet::new(vec![ipv4.into(), symbol.into(), float.into()]);
+
+        assert_eq!(set.matches("testing!").iter().map(|x| *x).collect::<Vec<_>>(), Vec::<(usize, usize)>::new());
+        assert_eq!(set.matches("testTing!").iter().map(|x| *x).collect::<Vec<_>>(), vec![(1, 4)]);
+        assert_eq!(set.matches("192.168.0.0").iter().map(|x| *x).collect::<Vec<_>>(), vec![(0, 0), (2, 0)]);
+        assert_eq!(set.matches("sdfsd 192.168.0.0 He45 ad").iter().map(|x| *x).collect::<Vec<_>>(), vec![(0, 6), (2, 6), (1, 18)]);
+
 
     }
 
