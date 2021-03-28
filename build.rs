@@ -5,7 +5,8 @@ use std::env;
 use std::fs::File;
 use std::path::Path;
 
-use native_regex_lib::rust_translate::translate;
+use native_regex_lib::rust_translate::RustCompiler;
+use native_regex_lib::compiler::Compiler;
 
 fn main() {
     let out_dir = env::var("OUT_DIR").unwrap();
@@ -22,11 +23,15 @@ fn main() {
         ("\\b[0-9]+\\b", "WordboundaryRegex"),
         ("^hello", "StartRegex"),
         ("hello$", "EndRegex"),
-        ("(?P<symbol>[A-Z][a-z]*)(?P<quantity>[0-9]+)?", "NamesRegex")
+        ("(?P<symbol>[A-Z][a-z]*)(?P<quantity>[0-9]+)?", "NamesRegex"),
+        ("(h)(e)?(l)?(p)?", "OptionalRegex"),
+        ("(?m)^starto[f]?line", "StartLineRegex"),
+        ("(?m)endo[f]?line$", "EndLineRegex"),
+        ("t()g", "EmptyRegex")
     ];
 
     for (regex, function) in regexes.iter() {
-        f.write_all(translate(*regex, *function).unwrap().as_bytes()).unwrap();
+        f.write_all(RustCompiler::translate(*regex, *function).unwrap().as_bytes()).unwrap();
     }
 
 

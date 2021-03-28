@@ -9,11 +9,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Unfinished Ideas
 
+## [0.1.4] - 2021-03-23
+
+### Added
+- Test for `Captures` returned by `SetMatches`
+- Add tests for unicode characters
+- Tests for replacer function
+- Added test for empty regex
+- Made use of `Captures::first` function when matching
+
 ## [0.1.3] - 2021-03-21
 
 ### Added
 - Tests for NativeRegexSet
 - Tests for regexes that terminate due to end of string
+- Tests for multiline flags with start and end anchors
 
 ## [0.1.2] - 2021-03-18
 
