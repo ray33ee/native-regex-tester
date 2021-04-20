@@ -9,6 +9,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Unfinished Ideas
 
+## [0.1.5] - 2021-03-28
+
+### Added
+- Basic benchmarks
+- Tests for 
+    - Repetition bug
+    - Capture index replacer
+    - Rouch benchmark
+    - Word boundaries and anchors are back!
+- Various changes to keep up to date with Native Regex library    
+
+### Changed
+- Regex set tests modified to work with hash maps
+
 ## [0.1.4] - 2021-03-23
 
 ### Added

@@ -1,6 +1,6 @@
 [package]
 name = "native-regex-tester"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["ray33ee <30669752+ray33ee@users.noreply.github.com>"]
 edition = "2018"
 
@@ -14,4 +14,7 @@ native-regex-lib = { path = "E:\\Software Projects\\IntelliJ\\native-regex-lib"}
 native-regex-lib = { path = "E:\\Software Projects\\IntelliJ\\native-regex-lib" }
 # native-regex-lib = { git = "https://github.com/ray33ee/native-regex-lib", branch="main" }
 regex = "1.4.5"
+regex-syntax = "0.6.23"
 
+[profile.test]
+opt-level = 3

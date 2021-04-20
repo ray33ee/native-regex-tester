@@ -17,7 +17,7 @@ checksum = "0ee1c47aaa256ecabcaea351eae4a9b01ef39ed810004e298d2511ed284b1525"
 
 [[package]]
 name = "native-regex-lib"
-version = "0.3.3"
+version = "0.4.1"
 dependencies = [
  "regex",
  "regex-syntax",
@@ -25,10 +25,11 @@ dependencies = [
 
 [[package]]
 name = "native-regex-tester"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "native-regex-lib",
  "regex",
+ "regex-syntax",
 ]
 
 [[package]]
